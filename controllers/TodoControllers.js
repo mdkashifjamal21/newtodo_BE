@@ -1,5 +1,27 @@
 const TodoModel = require("../model/TodoModel.js");
 
+module.exports.getToDos = async (req, res) => {
+  try {
+    const todoData = await TodoModel.find();
+    res.status(200).send(todoData);
+  } catch (err) {
+    res.status(400).send({ error: err });
+  }
+};
+
+module.exports.getTodoById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      res.status(400).send({ error: "Id is required" });
+    }
+    const todoData = await TodoModel.findById(id);
+    res.status(200).send(todoData);
+  } catch (err) {
+    res.status(400).send({ error: err });
+  }
+};
+
 module.exports.saveTodo = (req, res) => {
   const { todo } = req.body;
 
@@ -10,6 +32,13 @@ module.exports.saveTodo = (req, res) => {
     })
     .catch((err) => {
       console.log("Error", err);
-      res.status(400).send({ error: err });
+      res.status(404).send({ error: err });
     });
 };
+
+// 200 -> Successfull data Fetch from Database
+// 201 -> Successfull data post in Database
+// 400 -> Error in data Fetch from Database
+// 404 -> Error in data post in Database
+// 500 -> Server Error
+// 401 -> Unauthorized

@@ -20,7 +20,7 @@ mongoose
     console.log("Error", err);
   });
 
-app.use("/baseApi", routes);
+app.use("/v1", routes);
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`)); // Start the server on port 5000
 
