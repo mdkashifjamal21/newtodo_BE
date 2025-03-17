@@ -1,3 +1,4 @@
+const { model } = require("mongoose");
 const TodoModel = require("../model/TodoModel.js");
 
 module.exports.getToDos = async (req, res) => {
@@ -33,6 +34,31 @@ module.exports.saveTodo = (req, res) => {
     .catch((err) => {
       console.log("Error", err);
       res.status(404).send({ error: err });
+    });
+};
+
+module.exports.updateTodo = async (req, res) => {
+  const { id } = req.params;
+  const { todo } = req.body;
+
+  TodoModel.findByIdAndUpdate(id, { todo })
+    .then(() => {
+      res.status(200).send("Updated Successfully");
+    })
+    .catch((err) => {
+      res.status(400).send({ error: err });
+    });
+};
+
+module.exports.deleteTodo = async (req, res) => {
+  const { id } = req.params;
+
+  TodoModel.findByIdAndDelete(id)
+    .then(() => {
+      res.status(200).send("Deleted Successfully");
+    })
+    .catch((err) => {
+      res.status(400).send({ error: err });
     });
 };
 
