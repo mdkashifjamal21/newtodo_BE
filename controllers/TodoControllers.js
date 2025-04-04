@@ -23,25 +23,29 @@ module.exports.getTodoById = async (req, res) => {
   }
 };
 
-module.exports.saveTodo = (req, res) => {
-  const { todo } = req.body;
+module.exports.saveTodo = async (req, res) => {  
+  const { name, email, todo, date, isloggedIn, userExist } = req.body;  
 
-  TodoModel.create({ todo })
-    .then((data) => {
-      console.log("Saved Successfully");
-      res.status(201).send(data);
-    })
-    .catch((err) => {
-      console.log("Error", err);
-      res.status(404).send({ error: err });
-    });
-};
+  // Validate required fields  
+  if (!name || !email || !todo || !date || isloggedIn === undefined || userExist === undefined) {  
+      return res.status(400).send({ error: "All fields are required." });  
+  }  
+
+  try {  
+      const data = await TodoModel.create({ name, email, todo, date, isloggedIn, userExist });  
+      console.log("Saved Successfully");  
+      res.status(201).send(data);  
+  } catch (err) {  
+      console.log("Error", err);  
+      res.status(500).send({ error: "Unable to save todo." });  
+  }  
+};  
 
 module.exports.updateTodo = async (req, res) => {
   const { id } = req.params;
-  const { todo } = req.body;
+  const { todo,date,name } = req.body;
 
-  TodoModel.findByIdAndUpdate(id, { todo })
+  TodoModel.findByIdAndUpdate(id, { todo,date,name })
     .then(() => {
       res.status(200).send("Updated Successfully");
     })
