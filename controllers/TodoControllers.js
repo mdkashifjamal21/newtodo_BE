@@ -52,7 +52,7 @@ module.exports.updateTodo = async (req, res) => {
     .catch((err) => {
       res.status(400).send({ error: err });
     });
-};
+}; 
 
 module.exports.deleteTodo = async (req, res) => {
   const { id } = req.params;
